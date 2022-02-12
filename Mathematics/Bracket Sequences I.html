@@ -1,0 +1,70 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+<link rel="stylesheet" type="text/css" href="../content.css">
+
+<body>
+<div class="card">
+	<h2>Problem: Bracket Sequences I</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/2064">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+#define ll long long
+using namespace std;
+ll M=1000000007;
+vector&lt;ll&gt; invFac;
+vector&lt;ll&gt; fac;
+
+ll binpow(ll x,ll y,ll m){
+	ll re=1;
+	while(y){
+		if (y&amp;1) re=(re*x)%m;
+		y&gt;&gt;=1;
+		x=(x*x)%m;
+	}
+	return re;
+}
+ll C(int n, int k){
+	return fac[n]*invFac[k]%M*invFac[n-k]%M;
+}
+int main(){
+	int n;
+	cin&gt;&gt;n;
+	if (n%2){
+		cout&lt;&lt;0&lt;&lt;'\n';
+		return 0;
+	}
+	fac.assign(n+1,1);
+	invFac.assign(n+1,1);
+	for (int i=2;i&lt;=n;++i){
+		fac[i]=fac[i-1]*i%M;
+		invFac[i]=binpow(fac[i],M-2,M);
+	}
+	n/=2;
+	ll re=C(2*n,n)-C(2*n,n-1)+M;
+	re%=M;
+	cout&lt;&lt;re&lt;&lt;'\n';
+	return 0;
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

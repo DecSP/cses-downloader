@@ -1,0 +1,86 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+<link rel="stylesheet" type="text/css" href="../content.css">
+
+<body>
+<div class="card">
+	<h2>Problem: Shortest Routes I</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1671">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+#define ll long long
+#define fastio ios::sync_with_stdio(false); cin.tie(NULL)
+using namespace std;
+
+ll MOD = 1000000007;
+
+struct edge {
+	int to;
+	ll w;
+};
+
+vector&lt;vector&lt;edge&gt;&gt; adjList;
+int n,m;
+
+int main() {
+	MOD*=MOD;
+	cin&gt;&gt;n&gt;&gt;m;
+	adjList.assign(n,vector&lt;edge&gt;());
+	for (int i=0; i&lt;m; ++i) {
+		int a,b,c;
+		cin&gt;&gt;a&gt;&gt;b&gt;&gt;c;
+		--a;--b;
+		adjList[a].push_back(edge({b,(ll)c}));
+	}
+	
+	// map&lt;ll,int&gt; m;
+	set&lt;pair&lt;ll,int&gt;&gt; m;
+	vector&lt;ll&gt; d (n,MOD);	
+	d[0]=0;
+
+	m.insert(pair&lt;ll,int&gt;(0LL,0));
+
+	while (!m.empty()) {
+		int curr = m.begin()-&gt;second;
+		m.erase(m.begin());
+
+		for (edge &amp;e: adjList[curr]) {
+			if (d[e.to]&gt;d[curr]+e.w){
+				m.erase({d[e.to],e.to});
+				d[e.to]=d[curr]+e.w;
+				m.insert(pair&lt;ll,int&gt;(d[e.to],e.to));
+			}
+		}
+
+	}
+
+	for (int i=0;i&lt;n;++i){
+		if (i!=0) cout&lt;&lt;' ';
+		cout&lt;&lt;d[i];
+	}
+	cout&lt;&lt;'\n';
+	return 0;
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

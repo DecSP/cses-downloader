@@ -1,0 +1,41 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+<link rel="stylesheet" type="text/css" href="../content.css">
+
+<body>
+<div class="card">
+	<h2>Problem: Nim Game II</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1098">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-python">t=int(input())
+def solve():
+	n=int(input())
+	s=0
+	for k in map(int,input().split()):
+		s^=k%4
+	print("first" if s!=0 else "second")
+for i in range(t):
+	solve()</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

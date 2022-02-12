@@ -1,0 +1,71 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+<link rel="stylesheet" type="text/css" href="../content.css">
+
+<body>
+<div class="card">
+	<h2>Problem: Course Schedule</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1679">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int n,m;
+vector&lt;vector&lt;int&gt;&gt; adjList;
+vector&lt;int&gt; color;
+vector&lt;int&gt; path;
+
+bool dfs(int curr){
+	color[curr]=1;
+	for(int &amp;v:adjList[curr]){
+		if (color[v]==2) continue;
+		if (color[v]==1 || dfs(v)) return true;
+	}
+	color[curr]=2;
+	path.push_back(curr);
+	return false;
+}
+
+int main(){
+	ios::sync_with_stdio(0);cin.tie(NULL);
+	cin&gt;&gt;n&gt;&gt;m;
+	adjList.assign(n,vector&lt;int&gt;());
+	color.assign(n,0);
+	for (int i=0;i&lt;m;++i){
+		int a,b;
+		cin&gt;&gt;a&gt;&gt;b;--a;--b;
+		adjList[a].push_back(b);
+	}
+	for (int i=0;i&lt;n;++i){
+		if (color[i]) continue;
+		if (dfs(i)) {
+			cout&lt;&lt;"IMPOSSIBLE";
+			return 0;
+		}
+	}
+	for (int i=n-1;i&gt;=0;--i) cout&lt;&lt;path[i]+1&lt;&lt;' ';
+	return 0;
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

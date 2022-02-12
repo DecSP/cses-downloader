@@ -1,0 +1,79 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+<link rel="stylesheet" type="text/css" href="../content.css">
+
+<body>
+<div class="card">
+	<h2>Problem: Moving Robots</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1726">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+int k;
+struct br{
+	array&lt;double,64&gt; board;
+	public: br(){
+		board.fill(0);
+	}
+};
+array&lt;int,2&gt;dir[]={{-1,0},{1,0},{0,-1},{0,1}};
+void solve(){
+	vector&lt;vector&lt;br&gt;&gt; dp(64,vector&lt;br&gt;(k+1,br()));
+	for (int i=0;i&lt;64;++i) dp[i][0].board[i]=1;
+	for (int i=1;i&lt;=k;++i){
+		for (int r=0;r&lt;8;++r){
+			for (int c=0;c&lt;8;++c){
+				int cnt=0;
+				for (int j=0;j&lt;4;++j){
+					int nr=r+dir[j][0],nc=c+dir[j][1];
+					if (nr&lt;0||nr&gt;=8||nc&lt;0||nc&gt;=8) continue;
+					++cnt;
+				}
+				for (int j=0;j&lt;4;++j){
+					int nr=r+dir[j][0],nc=c+dir[j][1];
+					if (nr&lt;0||nr&gt;=8||nc&lt;0||nc&gt;=8) continue;
+					for (int pos=0;pos&lt;64;++pos){
+						dp[r*8+c][i].board[pos]+=dp[nr*8+nc][i-1].board[pos]/cnt;
+					}
+				}
+			}
+		}
+	}
+	double re=0;
+	for (int i=0;i&lt;64;++i){
+		double tmp=1;
+		for (int j=0;j&lt;64;++j)
+			tmp*=(1-dp[j][k].board[i]);
+		re+=tmp;
+	}
+	printf("%.6f\n",re);
+}
+
+int main(){
+	scanf("%d",&amp;k);
+	solve();
+	return 0;
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

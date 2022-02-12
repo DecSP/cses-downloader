@@ -1,0 +1,86 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+<link rel="stylesheet" type="text/css" href="../content.css">
+
+<body>
+<div class="card">
+	<h2>Problem: Road Reparation</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1675">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+typedef long long ll;
+const ll MOD=1000000007;
+int n,m;
+vector&lt;array&lt;int,3&gt;&gt; eL;
+vector&lt;int&gt; p;
+vector&lt;int&gt; sz;
+ll re;
+
+int find(int x){
+	return p[x]=(x==p[x])?x:find(p[x]);
+}
+
+void uni(int a, int b){
+	int x=find(a),y=find(b);
+	if (x==y) return;
+	if (sz[x]&gt;sz[y]) {
+		p[y]=x;
+		sz[x]+=sz[y];
+	}
+	else {
+		p[x]=y;
+		sz[y]+=sz[x];
+	}
+}
+
+bool solve(){
+	p.assign(n,0);
+	iota(p.begin(),p.end(),0);
+	sz.assign(n,1);
+	re=0;
+	for (auto &amp;arr:eL) {
+		int a=find(arr[1]),b=find(arr[2]);
+		if (a==b) continue;
+		else uni(a,b);
+		re+=arr[0];
+	}
+	return sz[find(0)]==n;
+}
+
+int main(){
+	ios::sync_with_stdio(0);cin.tie(NULL);
+	cin&gt;&gt;n&gt;&gt;m;
+	for (int i=0;i&lt;m;++i){
+		int a,b,c;
+		cin&gt;&gt;a&gt;&gt;b&gt;&gt;c;--a;--b;
+		eL.push_back({c,a,b});
+	}
+	sort(eL.begin(),eL.end());
+	if (solve()) cout&lt;&lt;re;
+	else cout&lt;&lt;"IMPOSSIBLE";
+	return 0;
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

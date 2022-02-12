@@ -1,0 +1,102 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+<link rel="stylesheet" type="text/css" href="../content.css">
+
+<body>
+<div class="card">
+	<h2>Problem: Labyrinth</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1193">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+#define ll long long
+using namespace std;
+
+vector&lt;string&gt; s;
+int n,m;
+int dirx[]={-1,1,0,0};
+int diry[]={0,0,-1,1};
+char dir[]={'U','D','L','R'};
+
+bool bfs(pair&lt;int,int&gt; curr,vector&lt;pair&lt;int,char&gt;&gt; &amp; path){
+    queue&lt;pair&lt;int,int&gt;&gt; q;
+    q.push(curr);
+    s[curr.first][curr.second]='#';
+    while (!q.empty()){
+        curr=q.front();
+        q.pop();
+        for (int i=0;i&lt;4;++i){
+            pair&lt;int,int&gt;nxt={curr.first+dirx[i],curr.second+diry[i]};
+            if (nxt.first&gt;=n||nxt.first&lt;0||nxt.second&gt;=m||nxt.second&lt;0) continue;
+            if (s[nxt.first][nxt.second]=='#') continue;
+            path[nxt.first*m+nxt.second]={curr.first*m+curr.second,dir[i]};
+            if (s[nxt.first][nxt.second]=='B') return true;
+            q.push(nxt);
+            s[nxt.first][nxt.second]='#';
+        }
+    }
+    return false;
+}
+
+void solve(){
+    cin&gt;&gt;n&gt;&gt;m;
+    s.assign(n,"");
+    pair&lt;int,int&gt;A,B;
+    for (int i=0;i&lt;n;++i) {
+        cin&gt;&gt;s[i];
+        for (int j=0;j&lt;m;++j){
+            if (s[i][j]=='A') A={i,j};
+            if (s[i][j]=='B') B={i,j};
+        }
+    }
+    vector&lt;pair&lt;int,char&gt;&gt; path(n*m);
+
+    if (bfs(A,path)) {
+        cout&lt;&lt;"YES\n";
+        string pathTo;
+        while (B!=A) {
+            auto p = path[B.first*m+B.second];
+            pathTo.push_back(p.second);
+            B={p.first/m,p.first%m};
+        }
+        reverse(pathTo.begin(),pathTo.end());
+        cout&lt;&lt;pathTo.size()&lt;&lt;'\n';
+        cout&lt;&lt;pathTo&lt;&lt;'\n';
+    }
+    else{
+        cout&lt;&lt;"NO\n";
+    }
+}
+
+
+int main()
+{
+    // fastio;
+    solve();
+	return 0;
+}
+
+</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

@@ -1,0 +1,169 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+<link rel="stylesheet" type="text/css" href="../content.css">
+
+<body>
+<div class="card">
+	<h2>Problem: Planets Queries II</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1160">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+#define ll long long
+using namespace std;
+
+int n,m,timer,timer1;
+vector&lt;int&gt; p,tin,tout;
+vector&lt;array&lt;int,3&gt;&gt; idx;
+vector&lt;vector&lt;int&gt;&gt; l,up,adjList;
+
+void genLine(int x){
+	vector&lt;int&gt; v;
+	while (idx[x][0]&gt;0){
+		v.push_back(x);
+		idx[x][0]=-2;
+		x=p[x];
+	}
+	if (idx[x][0]!=0) x=-1;
+ 	reverse(v.begin(),v.end());
+ 	for (int&amp; c:v){
+ 		if (p[c]!=x) adjList[p[c]].push_back(c);
+ 		else adjList[l[idx[x][1]][0]].push_back(c);
+ 	}
+
+}
+
+void genCycle(int x){
+	int pos=l.size();
+	int turtle=p[x], rabbit=p[p[x]];
+	while (turtle!=rabbit){
+		turtle=p[turtle];
+		rabbit=p[p[rabbit]];
+	}
+	int y=x;
+	
+	while (y!=turtle){
+		y=p[y];
+		turtle=p[turtle];
+	}
+
+	l.push_back({y});
+	vector&lt;int&gt; &amp;cycle=l[pos];
+	idx[y]={0,pos,0};
+	int y1=p[y];
+	int tmp=1;
+	while (y1!=y) {
+		idx[y1]={0,pos,tmp++};
+		cycle.push_back(y1);
+		y1=p[y1];
+	}
+
+ 	genLine(x);
+}
+
+void merge(int x){
+	idx[x][0]=timer;
+	int tmp=p[x];
+	while (idx[tmp][0]==-1){
+		idx[tmp][0]=timer;
+		tmp=p[tmp];
+	}
+	int a=idx[tmp][0];
+	if (a==timer) genCycle(x);
+	else genLine(x);
+	++timer;
+}
+
+void dfs(int x,int pre){
+	tin[x]=timer1++;
+	up[x][0]=pre;
+	for (int i=1;i&lt;20;++i)
+		up[x][i]=up[up[x][i-1]][i-1];
+
+	for (int &amp;c:adjList[x])	dfs(c,x);
+	tout[x]=timer1++;
+}
+
+bool is_ancestor(int x,int y){
+	return tin[x]&lt;=tin[y]&amp;&amp;tout[x]&gt;=tout[y];
+}
+
+int get(int x, int y){
+	if (x==y) return 0;
+	int re=0;
+	int &amp;a=idx[x][0],&amp;b=idx[x][1],&amp;c=idx[x][2];
+	if (a==0){
+		if (idx[y][0]==0&amp;&amp;b==idx[y][1]) {
+			re=idx[y][2]-c;
+			if (re&lt;0) re+=l[b].size();
+			return re;
+		}
+		return -1;
+	}
+	int y1=y;
+	if (idx[y][0]==0) y=l[idx[y][1]][0];
+	if (!is_ancestor(y,x)) return -1;
+	for (int i=19;i&gt;=0;--i){
+		if (is_ancestor(up[x][i],y))continue;
+		x=up[x][i];
+		re+=(1&lt;&lt;i);
+	}
+	x=p[x];
+	++re;
+	if (x!=y1)  return re+get(x,y1);
+	return re;
+}
+
+void solve(){
+	idx.assign(n,{-1,-1,-1});
+	up.assign(n,vector&lt;int&gt;(20,-1));
+	adjList.assign(n,vector&lt;int&gt;());
+	tin.assign(n,-1);
+	tout.assign(n,-1);
+	timer=timer1=1;
+	for (int i=0;i&lt;n;++i){
+		if (idx[i][0]==-1) merge(i);
+	}
+	for (int i=0;i&lt;n;++i){
+		if (idx[i][0]==0&amp;&amp;idx[i][2]==0) dfs(i,i);
+	}
+	for (int i=0;i&lt;m;++i){
+		int x,y;
+		cin&gt;&gt;x&gt;&gt;y;
+		cout&lt;&lt;get(x-1,y-1)&lt;&lt;'\n';
+	}
+}
+
+int main(){
+	ios::sync_with_stdio(0);cin.tie(NULL);
+	cin&gt;&gt;n&gt;&gt;m;
+	p.assign(n,-1);
+	for (int i=0;i&lt;n;++i){
+		cin&gt;&gt;p[i];
+		--p[i];
+	}
+	solve();
+	return 0;
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

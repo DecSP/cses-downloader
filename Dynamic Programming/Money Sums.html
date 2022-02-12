@@ -1,0 +1,75 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+<link rel="stylesheet" type="text/css" href="../content.css">
+
+<body>
+<div class="card">
+	<h2>Problem: Money Sums</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1745">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp"># include &lt;bits/stdc++.h&gt;
+# define ll long long
+# define all(x) x.begin(), x.end()
+# define fastio ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+# define MOD 1000000007
+using namespace std;
+int n;
+vector&lt;int&gt; lsCoin;
+vector&lt;int&gt; dp;
+
+int main(){
+	fastio;
+    cin&gt;&gt;n;
+    lsCoin.assign(n,0);
+    int s=0;
+    for (int i=0;i&lt;n;++i) {
+        cin&gt;&gt;lsCoin[i];
+        s+=lsCoin[i];
+    }
+    dp.assign(s+1,-1);
+    dp[0]=1;
+    vector&lt;int&gt; allSum;
+    for (int k=0;k&lt;lsCoin.size();++k){
+        for (int i=s;i&gt;=1;--i) {
+            if (lsCoin[k]&lt;=i&amp;&amp;dp[i-lsCoin[k]]==1){
+                dp[i]=1;
+            }
+        }
+    }
+    for (int i=1;i&lt;=s;++i) {
+        if (dp[i]==1)
+                allSum.push_back(i);
+    }
+    cout&lt;&lt;allSum.size()&lt;&lt;'\n';
+    for (int i=0;i&lt;allSum.size();++i){
+        if (i!=0) cout&lt;&lt;' ';
+        cout&lt;&lt;allSum[i];
+    }
+    cout&lt;&lt;'\n';
+	return 0;
+}
+
+</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+
