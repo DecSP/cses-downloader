@@ -82,13 +82,16 @@ summary{
 }
 details li{
 	list-style-type: none;
-	padding: 10px 10px 0 10px;
+	margin: 10px 10px 0 10px;
 }
 details li::before{
 	content: "\25CB";
 	color: #57CC99;
 	display: inline-block; 
 	width: 20px;
+}
+.highlight{
+	background-color: #d5f5da;
 }
 .content{
 	width: 100%;
