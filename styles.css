@@ -10,13 +10,14 @@ a{
 }
 .header{
 	position: relative;
-	z-index: 10;
+	z-index: 5;
 	box-shadow: 0 5px 10px #00000030;
 	box-sizing: border-box;
 	padding: 20px 50px 20px 50px;
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
+	background: #fff;
 }
 .header span{
 	font-size: 27px;
@@ -26,6 +27,7 @@ a{
 	border-radius: 35px 10px 35px 10px / 61px 10px 61px 10px;
 	border: 2px solid #38A3A5;
 	border-style: none solid solid none;
+	cursor: default;
 }
 .header div{
 	padding: 5px;
@@ -34,19 +36,38 @@ a{
 .header div a{
 	margin: 0 5px 0 5px;
 }
+.navbar{
+	display: flex;
+	align-items: center;
+	width: max-content;
+}
+.collapse{
+	display: none;
+}
+.collapse:active{
+	box-shadow: none;
+	transform: translateY(4px);
+}
+.home, .contact{
+	text-decoration: none;
+}
+.homebtn, .contactbtn{
+	background-color: #fff;
+}
 #main{
 	display: flex;
 	flex-wrap: nowrap;
 }
 .sidebar{
-	height: calc(100vh - 81px);
-	width: 250px;
+	height: calc(100vh - 79px);
+	width: 300px;
 	position: sticky;
 	top: 0;
-	z-index: 5;
+	z-index: 3;
 	padding: 25px;
 	box-sizing: border-box;
 	overflow: auto;
+	background: #fff;
 }
 details{
 	color: #38A3A5;
@@ -83,6 +104,7 @@ iframe{
 	padding: 25px 35px 25px 35px;
 	background: #fff;
 	margin-bottom: 25px;
+	overflow-x: auto;
 }
 table{
 	border-collapse: collapse;
@@ -100,7 +122,8 @@ table td{
 	border: 1px solid #ccc;
 }
 pre{
-	width: max-content;
+	width: 100%;
+	box-sizing: border-box;
 	border-radius: 10px;
 }
 .problem code{
@@ -126,6 +149,7 @@ hr{
 }
 .intuition{
 	list-style-type: none;
+	margin-bottom: 25px;
 }
 .intuition li::before{
 	content: "\25CF";
@@ -133,4 +157,56 @@ hr{
 	display: inline-block; 
 	width: 20px;
 	margin-left: -20px;
+}
+
+
+@media(max-width: 670px){
+	button, a, summary{
+		cursor: default;
+	}
+	.header{
+		position: sticky;
+		top: 0;
+		padding: 15px;
+		justify-content: space-between;
+	}
+	.header div a{
+		display: none;
+	}
+	.collapse{
+		width: 39px;
+		margin: 0 0 0 10px;
+		display: block;
+		border: none;
+		background: #fff;
+		border-radius: 10px;
+		cursor: default;
+		box-shadow: 0 3px 5px #ddd;
+		box-sizing: border-box;
+		padding: 10px 10px 8px 10px;
+		font-size: 17px;
+		color: #38A3A5;
+	}
+	.sidebar{
+		display: none;
+		height: 190px;
+		position: fixed;
+		top: 78px;
+		overflow-y: auto;
+		width: 100%;
+		border-bottom: 3px solid #38A3A5;
+	}
+	.content{
+		height: calc(100vh - 78px);
+	}
+	#main{
+		display: block;
+	}
+	.card{
+		padding: 20px;
+	}
+	pre{
+		width: 100%;
+		box-sizing: border-box;
+	}
 }

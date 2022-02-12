@@ -1,0 +1,27 @@
+body{
+	padding: 25px 50px 25px 50px;
+	font-family: 'Cabin';
+}
+h2{
+	margin-bottom: 25px;
+}
+a{
+	color: #38A3A5;
+	text-decoration: underline;
+}
+div{
+	margin-bottom: 15px;
+}
+code, code[class*=language-], pre[class*=language-]{
+	font-family: 'Source Code Pro';
+	margin: 0;
+}
+ul{
+	margin: 0;
+	margin-top: 25px;
+}
+@media(max-width: 670px){
+	body{
+		padding: 25px;
+	}
+}
