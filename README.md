@@ -8,7 +8,7 @@ The site provides my solutions for coding problems of CSES site that is owned by
 <br>
 <img src="public/og.png" width="600px">
 
-## How to download you CSES solutions and/or package them into web interface:
+## How to download your CSES solutions and/or package them into web interface:
 You actually only need crawler.py (and htmlgen.py, style.css, content.css if you want to package solutions) for this. You might want to create an empty directory and put only those files inside. Please follow this steps:
 - Get your SESSID:
     - Go to CSES login page 
