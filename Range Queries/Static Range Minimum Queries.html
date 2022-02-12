@@ -1,0 +1,76 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+<link rel="stylesheet" type="text/css" href="../content.css">
+
+<body>
+<div class="card">
+	<h2>Problem: Static Range Minimum Queries</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1647">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp"># include &lt;bits/stdc++.h&gt;
+# define ll long long
+# define all(x) x.begin(), x.end()
+# define fastio ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+# define MOD 1000000007
+using namespace std;
+vector&lt;int&gt; st;
+vector&lt;int&gt; arr;
+void build(int v,int tl,int tr){
+	if (tl==tr){
+		st[v]=arr[tl];
+	}
+	else{
+		int mid=tl+tr&gt;&gt;1;
+		build(v*2,tl,mid);
+		build(v*2+1,mid+1,tr);
+		st[v]=min(st[v*2],st[v*2+1]);
+	}
+}
+int get(int v,int tl,int tr,int l , int r){
+	if (tl==l&amp;&amp;tr==r) return st[v];
+	if (tl&gt;r||tr&lt;l) return -1;
+	int mid=tl+tr&gt;&gt;1;
+	int x=get(v*2,tl,mid,l,min(mid,r)),y=get(v*2+1,mid+1,tr,max(l,mid+1),r);
+	if (x==-1)return y;
+	if (y==-1) return x;
+	return min(x,y);
+
+}
+int main(){
+	fastio;
+	int n,q;
+	cin&gt;&gt;n&gt;&gt;q;
+	st.assign(4*n,0);
+	arr.assign(n,0);
+	for (auto &amp; v:arr)cin&gt;&gt;v;
+	build(1,0,n-1);
+	int x,y;
+	for (int i=0;i&lt;q;i++){
+		cin&gt;&gt;x&gt;&gt;y;
+		cout&lt;&lt;get(1,0,n-1,x-1,y-1)&lt;&lt;'\n';
+	}
+	return 0;
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

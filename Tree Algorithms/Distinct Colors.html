@@ -1,0 +1,104 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+<link rel="stylesheet" type="text/css" href="../content.css">
+
+<body>
+<div class="card">
+	<h2>Problem: Distinct Colors</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1139">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+vector&lt;vector&lt;int&gt;&gt; adj;
+vector&lt;array&lt;int,3&gt;&gt;seg;
+int n,timer;
+vector&lt;int&gt; col;
+vector&lt;int&gt; ncol;
+vector&lt;int&gt; ans;
+vector&lt;int&gt; F;
+map&lt;int,int&gt; m;
+
+void dfs(int cur,int par){
+	seg[cur][1]=timer++;
+	ncol[timer-1]=col[cur];
+	for(int &amp;v:adj[cur]){
+		if (v==par)continue;
+		dfs(v,cur);
+	}
+	seg[cur][0]=timer-1;
+}
+void increase(int pos, int val){
+	for (int i=pos;i&lt;n;i=i|(i+1)){
+		F[i]+=val;
+	}
+}
+int sum1(int pos){
+	int re=0;
+	for (int i=pos;i&gt;=0;i=(i&amp;(i+1))-1){
+		re+=F[i];
+	}
+	return re;
+}
+int sum(int l,int r){
+	return sum1(r)-sum1(l-1);
+}
+int main(){
+	ios::sync_with_stdio(false);cin.tie(NULL);
+	cin&gt;&gt;n;
+	col.assign(n,0);
+	ans.assign(n,0);
+	adj.assign(n,vector&lt;int&gt;());
+	for (int&amp;v:col)cin&gt;&gt;v;
+	for (int i=0;i&lt;n-1;++i){
+		int a,b;cin&gt;&gt;a&gt;&gt;b;--a;--b;
+		adj[a].push_back(b);
+		adj[b].push_back(a);
+	}
+	timer=0;
+	seg.assign(n,array&lt;int,3&gt;());
+	ncol.assign(n,0);
+	for (int i=0;i&lt;n;++i){
+		seg[i][2]=i;
+	}
+	dfs(0,0);
+	sort(seg.begin(), seg.end());
+
+	F.assign(n,0);
+	int currend=-1;
+	for (auto &amp;ar:seg){
+		while (currend&lt;ar[0]){
+			++currend;
+			increase(currend,1);
+			int x=m[ncol[currend]];
+			if (x!=0) increase(x-1,-1);
+			m[ncol[currend]]=currend+1;
+		}
+		ans[ar[2]]=sum(ar[1],ar[0]);
+	}
+	for (int &amp;v:ans)cout&lt;&lt;v&lt;&lt;' ';
+	cout&lt;&lt;'\n';
+	return 0;
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

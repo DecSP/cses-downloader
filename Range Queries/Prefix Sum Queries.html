@@ -1,0 +1,119 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+<link rel="stylesheet" type="text/css" href="../content.css">
+
+<body>
+<div class="card">
+	<h2>Problem: Prefix Sum Queries</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/2166">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+#define ll long long
+using namespace std;
+
+struct Node{
+	ll pre;
+	ll addend;
+};
+
+vector&lt;Node&gt; st;
+vector&lt;ll&gt; a;
+int n,q;
+
+void buildTree(int v,int tl, int tr){
+	if (tl==tr){
+		st[v].pre=a[tl];
+		return;
+	}
+	int mid = (tl+tr)&gt;&gt;1;
+	buildTree(v*2,tl,mid);
+	buildTree(v*2+1,mid+1,tr);
+	st[v].pre=max(st[v*2].pre,st[v*2+1].pre);
+}
+
+void push(int v) {
+	st[v*2].pre+=st[v].addend;
+	st[v*2+1].pre+=st[v].addend;
+	st[v*2].addend+=st[v].addend;
+	st[v*2+1].addend+=st[v].addend;
+	st[v].addend=0;	
+}
+
+ll get(int v, int l, int r, int tl, int tr){
+	if(tl==l&amp;&amp;tr==r){
+		return st[v].pre;
+	}
+	if (l&gt;r) return -1e18;
+	push(v);
+	int mid = (tl+tr)&gt;&gt;1;
+	return max(get(v*2,l,min(r,mid),tl,mid),get(v*2+1,max(mid+1,l),r,mid+1,tr));
+}
+
+void update(int v, int l, int r, int tl, int tr, int add){
+	if (l&gt;r) return;
+	if (l==tl&amp;&amp;r==tr) {
+		st[v].pre+=add;
+		st[v].addend+=add;
+	}
+	else {
+		push(v);
+		int mid =(tl+tr)&gt;&gt;1;
+		update(v*2,l,min(r,mid),tl,mid,add);
+		update(v*2+1,max(l,mid+1),r,mid+1,tr,add);
+		st[v].pre=max(st[v*2].pre,st[v*2+1].pre);
+	}
+}
+
+int main(){
+	ios::sync_with_stdio(false);cin.tie(NULL);
+	cin&gt;&gt;n&gt;&gt;q;
+	a.assign(n,0);
+	vector&lt;int&gt;v(n);
+	for (int i=0;i&lt;n;++i){
+		cin&gt;&gt;v[i];
+		a[i]=v[i];
+		if (i) a[i]+=a[i-1];
+	}
+	st.assign(4*n,Node({0,0}));
+	buildTree(1,0,n-1);
+	for (int i=0;i&lt;q;++i){
+		int t;cin&gt;&gt;t;
+		if (t==2){
+			int x,y;cin&gt;&gt;x&gt;&gt;y;--x;--y;
+			ll re=get(1,x,y,0,n-1);
+			if (x) re-=get(1,x-1,x-1,0,n-1);
+			cout&lt;&lt;max(re,0LL)&lt;&lt;'\n';
+		}
+		else{
+			assert(t==1);
+			int k,u;
+			cin&gt;&gt;k&gt;&gt;u;--k;
+			update(1,k,n-1,0,n-1,u-v[k]);
+			v[k]=u;
+		}
+	}
+	return 0;
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+
