@@ -1,0 +1,87 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+
+<style type="text/css">
+	body{
+		padding: 25px 50px 25px 50px;
+		font-family: 'Cabin';
+	}
+	a{
+		color: #38A3A5;
+		text-decoration: underline;
+	}
+	div{
+		margin-bottom: 15px;
+	}
+	code, code[class*=language-], pre[class*=language-]{
+		font-family: 'Source Code Pro';
+	}
+</style>
+
+<body>
+<div class="card">
+	<h2>Problem: Counting Divisors</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1713">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp"># include &lt;bits/stdc++.h&gt;
+# define ll long long
+# define all(x) x.begin(), x.end()
+# define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+# define ten6 1e6+1.5
+using namespace std;
+
+
+int main()
+{
+    fastio;
+    int n,k;
+    cin&gt;&gt;n;
+    vector &lt;vector&lt;int&gt;&gt; div (ten6,vector&lt;int&gt;());
+    vector &lt;ll&gt; re (ten6,1);
+    for (ll i = 2;i&lt;ten6;i++){
+        if (div[i].size()==0){
+            ll j;
+            for (j=i;j&lt;ten6 ;j+=i)
+                    div[j].push_back(1);
+
+            j=i*i;
+            ll k =j;
+            while (j&lt;ten6){
+                for (k=j;k&lt;ten6 ;k+=j)
+                    div[k][div[k].size()-1]=div[k].back()+1;
+                j*=i;
+            }
+        }
+    }
+    for (int i=2;i&lt;ten6;i++){
+        for (auto &amp;v:div[i])re[i]*=v+1;
+    }
+    while (n--){
+        cin&gt;&gt;k;
+        cout&lt;&lt;re[k]&lt;&lt;'\n';
+    }
+    return 0;    
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

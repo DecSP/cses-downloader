@@ -1,0 +1,101 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+
+<style type="text/css">
+	body{
+		padding: 25px 50px 25px 50px;
+		font-family: 'Cabin';
+	}
+	a{
+		color: #38A3A5;
+		text-decoration: underline;
+	}
+	div{
+		margin-bottom: 15px;
+	}
+	code, code[class*=language-], pre[class*=language-]{
+		font-family: 'Source Code Pro';
+	}
+</style>
+
+<body>
+<div class="card">
+	<h2>Problem: Book Shop</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1158">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp"># include &lt;bits/stdc++.h&gt;
+# define ll long long
+# define all(x) x.begin(), x.end()
+# define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+# define MOD 1000000007
+# define ten6 1000002
+using namespace std;
+int n, X;
+vector&lt;pair&lt;int,int&gt;&gt; book,book2;
+vector&lt;vector&lt;int&gt;&gt; dp;
+
+int getMax(int money, int idx) {
+    if (idx&gt;=n||money&lt;=0) return 0;
+    if(dp[money][idx]&gt;=0) return dp[money][idx];
+    if (money&gt;=book2[idx].first) return dp[money][idx]=book2[idx].second;
+    if (book[idx].first&gt;money) return dp[money][idx]=getMax(money,idx+1);
+    return dp[money][idx]=max(book[idx].second+getMax(money-book[idx].first,idx+1),getMax(money,idx+1));
+}
+
+bool comp(pair&lt;int,int&gt; x,pair&lt;int,int&gt; y) {
+    double f=1.0/x.first*x.second;
+    double s= 1.0/y.first*y.second;
+    return f==s&amp;&amp;x&gt;y||f&lt;s;
+}
+
+int main()
+{
+    // freopen("test_input.txt","r",stdin);
+    // auto start=chrono::high_resolution_clock::now();
+
+    fastio;
+    cin&gt;&gt;n&gt;&gt;X;
+    dp.assign(X+1,vector&lt;int&gt;(n,-1));
+    book.assign(n,pair&lt;int,int&gt;());
+    for (int i=0;i&lt;n;++i) cin&gt;&gt;book[i].first;
+    for (int i=0;i&lt;n;++i) cin&gt;&gt;book[i].second;
+    sort(book.begin(),book.end(),comp);
+    book2.assign(n+1,pair&lt;int,int&gt;());
+    int s=-1;
+    for (int i=n-1;i&gt;=0;--i) {
+        book2[i].first=book2[i+1].first+book[i].first;
+        book2[i].second=book2[i+1].second+book[i].second;
+        if (s==-1&amp;&amp;book2[i].first&gt;X){
+            s=max(i-30,0);
+        }
+    }
+    s=max(s,0);
+    cout&lt;&lt;getMax(X,s)&lt;&lt;'\n';
+ 
+    // auto end=chrono::high_resolution_clock::now();
+    // cout&lt;&lt;"Time elapsed: "&lt;&lt;chrono::duration_cast&lt;chrono::milliseconds&gt;(end-start).count()&lt;&lt;endl;
+    return 0;
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

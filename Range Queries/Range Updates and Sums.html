@@ -1,0 +1,166 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+
+<style type="text/css">
+	body{
+		padding: 25px 50px 25px 50px;
+		font-family: 'Cabin';
+	}
+	a{
+		color: #38A3A5;
+		text-decoration: underline;
+	}
+	div{
+		margin-bottom: 15px;
+	}
+	code, code[class*=language-], pre[class*=language-]{
+		font-family: 'Source Code Pro';
+	}
+</style>
+
+<body>
+<div class="card">
+	<h2>Problem: Range Updates and Sums</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1735">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+#define fastio ios::sync_with_stdio(false);cin.tie(NULL)
+#define sz(x) (int)((x).size())
+#define ll long long
+using namespace std;
+
+const ll M=998244353LL;
+struct Node{
+	ll s,a,inc;
+    Node(ll s,ll a,ll inc){
+        this-&gt;s=s;
+        this-&gt;a=a;
+        this-&gt;inc=inc;
+	}
+};
+    
+struct ST{
+	vector&lt;ll&gt; a;
+	vector&lt;Node&gt; st;
+	ll n;
+    ST(vector&lt;ll&gt;&amp;a,ll n){
+        st.assign(n*4,Node(0,0,0));
+        this-&gt;a=a;
+        buildTree(0,n-1,1);
+	}
+    void buildTree(ll tl,ll tr,ll v){
+        if (tl==tr){
+            st[v]=Node(a[tl],0,0);
+            return;
+		}
+        ll mid=(tl+tr)&gt;&gt;1;
+        buildTree(tl,mid,v*2);
+        buildTree(mid+1,tr,v*2+1);
+        st[v].s=st[v*2].s+st[v*2+1].s;
+	}
+    void ass(ll tl,ll tr,ll l,ll r,ll v,ll val){
+        if (l&gt;r) return;
+        push(v,tr-tl+1);
+        if (tl==l &amp;&amp; tr==r){
+            st[v].a=val;
+            st[v].s=val*(r-l+1);
+            return;
+		}
+        ll mid=(tl+tr)&gt;&gt;1;
+        ass(tl,mid,l,min(mid,r),v*2,val);
+        ass(mid+1,tr,max(mid+1,l),r,v*2+1,val);
+        st[v].s=st[v*2].s+st[v*2+1].s;
+	}
+	void add(ll tl,ll tr,ll l,ll r,ll v,ll val){
+        if (l&gt;r) return;
+        push(v,tr-tl+1);
+        if (tl==l &amp;&amp; tr==r){
+            st[v].inc=val;
+            st[v].s+=val*(r-l+1);
+            return;
+		}
+        ll mid=(tl+tr)&gt;&gt;1;
+        add(tl,mid,l,min(mid,r),v*2,val);
+        add(mid+1,tr,max(mid+1,l),r,v*2+1,val);
+        st[v].s=st[v*2].s+st[v*2+1].s;
+	}
+    ll query(ll tl,ll tr,ll l,ll r,ll v){
+        if (l&gt;r) return 0;
+        if (tl==l &amp;&amp; tr==r) return st[v].s;
+        push(v,tr-tl+1);
+        ll mid=(tl+tr)&gt;&gt;1;
+        ll re=0;
+        re+=query(tl,mid,l,min(mid,r),v*2);
+        re+=query(mid+1,tr,max(mid+1,l),r,v*2+1);
+        return re;
+	}
+    void push(ll v,ll n){
+        if (n==1) return;
+        if (st[v].a){
+            st[v*2].a=st[v*2+1].a=st[v].a;
+            st[v*2].s=(n+1)/2*st[v].a;
+			st[v*2+1].s=n/2*st[v].a;
+            st[v].a=0;
+			st[v*2].inc=st[v*2+1].inc=0;
+		}
+		else if (st[v].inc){
+            st[v*2].inc+=st[v].inc;
+			st[v*2+1].inc+=st[v].inc;
+            st[v*2].s+=(n+1)/2*st[v].inc;
+			st[v*2+1].s+=n/2*st[v].inc;
+            st[v].inc=0;
+			if (st[v*2].a){
+				st[v*2].a+=st[v*2].inc;
+				st[v*2].inc=0;
+			}
+			if (st[v*2+1].a){
+				st[v*2+1].a+=st[v*2+1].inc;
+				st[v*2+1].inc=0;
+			}
+		}
+	}
+};
+int main(){
+	fastio;
+	int n,q;cin&gt;&gt;n&gt;&gt;q;
+	vector&lt;ll&gt; a(n);
+	for (auto &amp;v:a) cin&gt;&gt;v;
+	ST st=ST(a,n);
+	for (ll i=0;i&lt;q;++i){
+		int t,x,y;cin&gt;&gt;t&gt;&gt;x&gt;&gt;y;
+		if (t==3){
+			cout&lt;&lt;st.query(0,n-1,x-1,y-1,1)&lt;&lt;'\n';
+		}
+		else if (t==1){
+			int z;cin&gt;&gt;z;
+			st.add(0,n-1,x-1,y-1,1,z);
+		}
+		else {
+			int z;cin&gt;&gt;z;
+			st.ass(0,n-1,x-1,y-1,1,z);
+		}
+	}
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

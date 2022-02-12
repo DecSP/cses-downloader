@@ -1,0 +1,119 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+
+<style type="text/css">
+	body{
+		padding: 25px 50px 25px 50px;
+		font-family: 'Cabin';
+	}
+	a{
+		color: #38A3A5;
+		text-decoration: underline;
+	}
+	div{
+		margin-bottom: 15px;
+	}
+	code, code[class*=language-], pre[class*=language-]{
+		font-family: 'Source Code Pro';
+	}
+</style>
+
+<body>
+<div class="card">
+	<h2>Problem: High Score</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1673">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+#define ll long long
+#define fastio ios::sync_with_stdio(false); cin.tie(NULL)
+using namespace std;
+
+ll INF = 1000000007;
+struct edge{
+	int from;
+	int to;
+	ll w;
+};
+
+vector &lt;ll&gt; d;
+vector &lt;edge&gt; eL;
+vector&lt;vector&lt;int&gt;&gt;adjList;
+int n,m;
+
+ll solve() {
+	for (int i=0;i&lt;n-1;++i){
+		for (int j=0;j&lt;m;++j){
+			if (d[eL[j].from]!=INF &amp;&amp; d[eL[j].from]+eL[j].w&lt;d[eL[j].to]){
+				d[eL[j].to]=d[eL[j].from]+eL[j].w;
+			} 
+		}
+	}
+	vector&lt;int&gt; check(n);
+	for (int j=0;j&lt;m;++j){
+		if (d[eL[j].from]!=INF &amp;&amp; d[eL[j].from]+eL[j].w&lt;d[eL[j].to]){
+			check[eL[j].to]=1;
+			d[eL[j].to]=d[eL[j].from]+eL[j].w;
+		} 
+	}
+	queue&lt;int&gt;q,q1;
+	q.push(0);
+	while(!q.empty()){
+		int s=q.front();
+		q.pop();
+		if (check[s]==2) continue;
+		if (check[s]==1) q1.push(s);
+		check[s]=2;
+		for (int &amp;v:adjList[s]) q.push(v);
+	}
+	while(!q1.empty()){
+		int s=q1.front();
+		if (s==n-1) return -1;
+		q1.pop();
+		if (check[s]==3) continue;
+		check[s]=3;
+		for (int &amp;v:adjList[s]) q1.push(v);
+	}
+	return -d[n-1];
+}
+
+int main() {
+	fastio;
+	INF*=INF;
+	cin&gt;&gt;n&gt;&gt;m;
+	d.assign(n,INF);
+	d[0]=0;
+	adjList.assign(n,vector&lt;int&gt;());
+	for (int i=0; i&lt;m; ++i) {
+		int a,b;
+		ll c;
+		cin&gt;&gt;a&gt;&gt;b&gt;&gt;c;
+		--a;--b;c=-c;
+		eL.push_back(edge({a,b,c}));
+		adjList[a].push_back(b);
+	}
+	cout&lt;&lt;solve()&lt;&lt;'\n';
+	return 0;
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

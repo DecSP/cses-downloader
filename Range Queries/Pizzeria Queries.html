@@ -1,0 +1,113 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+
+<style type="text/css">
+	body{
+		padding: 25px 50px 25px 50px;
+		font-family: 'Cabin';
+	}
+	a{
+		color: #38A3A5;
+		text-decoration: underline;
+	}
+	div{
+		margin-bottom: 15px;
+	}
+	code, code[class*=language-], pre[class*=language-]{
+		font-family: 'Source Code Pro';
+	}
+</style>
+
+<body>
+<div class="card">
+	<h2>Problem: Pizzeria Queries</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/2206">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+#define ll long long
+using namespace std;
+const int INF=2e9;
+
+void buildTree(int v, int tl, int tr,vector&lt;int&gt;&amp;st,vector&lt;int&gt;&amp;a){
+	if (tl==tr){
+		st[v]=a[tl];
+		return;
+	}
+	int mid = (tl+tr)&gt;&gt;1;
+	buildTree(v*2,tl,mid,st,a);
+	buildTree(v*2+1,mid+1,tr,st,a);
+	st[v]=min(st[v*2],st[v*2+1]);
+}
+
+int get(int v, int l, int r, int tl, int tr,vector&lt;int&gt;&amp;st){
+	if (l&gt;r) return INF;
+	if (tl==l&amp;&amp;tr==r)return st[v];
+	int mid=(tl+tr)&gt;&gt;1;
+	return min(get(v*2,l,min(mid,r),tl,mid,st),get(v*2+1,max(l,mid+1),r,mid+1,tr,st));
+}
+
+void update(int v, int tl, int tr, int pos,vector&lt;int&gt;&amp;st,vector&lt;int&gt;&amp;a){
+	if (tl==tr){
+		st[v]=a[pos];
+		return;
+	}
+	int mid=(tl+tr)&gt;&gt;1;
+	if (pos&lt;=mid) update(v*2,tl,mid,pos,st,a);
+	else update(v*2+1,mid+1,tr,pos,st,a);
+	st[v]=min(st[v*2],st[v*2+1]);
+}
+
+int main(){
+	ios::sync_with_stdio(false);cin.tie(NULL);
+	int n,q;
+	cin&gt;&gt;n&gt;&gt;q;
+	vector&lt;int&gt; a1(n),a2(n),a(n);
+	for(int i=0;i&lt;n;++i){
+		cin&gt;&gt;a[i];
+		a1[i]=a[i]-i-1;
+		a2[i]=a[i]-n+i;
+	}
+	vector&lt;int&gt;st1(n*4),st2(n*4);
+	buildTree(1,0,n-1,st1,a1);
+	buildTree(1,0,n-1,st2,a2);
+	for (int i=0;i&lt;q;++i){
+		int t,pos;cin&gt;&gt;t&gt;&gt;pos;--pos;
+		if (t==2){
+			int re1=get(1,0,pos,0,n-1,st1)-a1[pos];
+			int re2=get(1,pos,n-1,0,n-1,st2)-a2[pos];
+			cout&lt;&lt;min(re1,re2)+a[pos]&lt;&lt;'\n';
+		}
+		else {
+			int val;cin&gt;&gt;val;
+			a1[pos]+=val-a[pos];
+			a2[pos]+=val-a[pos];
+			a[pos]=val;
+			update(1,0,n-1,pos,st1,a1);
+			update(1,0,n-1,pos,st2,a2);
+		}
+	}
+	return 0;
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

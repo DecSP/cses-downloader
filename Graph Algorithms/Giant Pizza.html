@@ -1,0 +1,112 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+
+<style type="text/css">
+	body{
+		padding: 25px 50px 25px 50px;
+		font-family: 'Cabin';
+	}
+	a{
+		color: #38A3A5;
+		text-decoration: underline;
+	}
+	div{
+		margin-bottom: 15px;
+	}
+	code, code[class*=language-], pre[class*=language-]{
+		font-family: 'Source Code Pro';
+	}
+</style>
+
+<body>
+<div class="card">
+	<h2>Problem: Giant Pizza</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1684">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
+using namespace std;
+
+int n,q;
+vector&lt;vector&lt;int&gt;&gt; neg,pos;
+vector&lt;int&gt; ans1,ans2;
+
+bool dfs(int cur, bool isPos,vector&lt;int&gt;&amp;ans){
+	bool re=true;
+	if (ans[cur]) return (ans[cur]&gt;0&amp;&amp;isPos)||(ans[cur]&lt;0&amp;&amp;!isPos);
+	ans[cur]=(isPos)?1:-1;
+	if (isPos) {
+		for(int &amp;v:pos[cur]){
+			if (v&gt;0) re=re&amp;&amp;dfs(v-1,true,ans);
+			else re=re&amp;&amp;dfs(abs(v)-1,false,ans);
+		}
+	}
+	else {
+		for(int &amp;v:neg[cur]){
+			if (v&gt;0) re=re&amp;&amp;dfs(v-1,true,ans);
+			else re=re&amp;&amp;dfs(abs(v)-1,false,ans);
+		}	
+	}
+	return re;
+}
+
+int main(){
+	ios::sync_with_stdio(false);cin.tie(NULL);
+	cin&gt;&gt;q&gt;&gt;n;
+	neg.assign(n,vector&lt;int&gt;());
+	pos.assign(n,vector&lt;int&gt;());
+
+	for (int i=0;i&lt;q;++i){
+		int a,b;char ca,cb;
+		cin&gt;&gt;ca&gt;&gt;a&gt;&gt;cb&gt;&gt;b;
+		a=a*((ca=='-')*-2+1);
+		b=b*((cb=='-')*-2+1);
+		if (b&lt;0) pos[-b-1].push_back(a);
+		else neg[b-1].push_back(a);
+		if (a&lt;0) pos[-a-1].push_back(b);
+		else neg[a-1].push_back(b);
+	}
+
+	ans1.assign(n,0);
+	ans2.assign(n,0);
+	vector&lt;int&gt; ans(n,0);
+	for (int i=0;i&lt;n;++i){
+		if (ans[i]) continue;
+		if(dfs(i,true,ans1)) 
+			dfs(i,true,ans);
+		else if (dfs(i,false,ans2))
+			dfs(i,false,ans);
+		else {
+			cout&lt;&lt;"IMPOSSIBLE\n";
+			return 0;
+		}
+	}
+	for (int i=0;i&lt;n;++i){
+		if (ans[i]&gt;0) cout&lt;&lt;"+ ";
+		else cout&lt;&lt;"- ";
+	}
+	cout&lt;&lt;'\n';
+	return 0;
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

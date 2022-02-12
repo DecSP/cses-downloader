@@ -1,0 +1,146 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+
+<style type="text/css">
+	body{
+		padding: 25px 50px 25px 50px;
+		font-family: 'Cabin';
+	}
+	a{
+		color: #38A3A5;
+		text-decoration: underline;
+	}
+	div{
+		margin-bottom: 15px;
+	}
+	code, code[class*=language-], pre[class*=language-]{
+		font-family: 'Source Code Pro';
+	}
+</style>
+
+<body>
+<div class="card">
+	<h2>Problem: Increasing Array Queries</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/2416">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+#define ll long long
+#define fastio ios::sync_with_stdio(false);cin.tie(NULL)
+using namespace std;
+
+const int INF=1e9;
+
+int n,q;
+vector&lt;int&gt;a;
+vector&lt;int&gt;p;
+vector&lt;ll&gt;acu;
+vector&lt;ll&gt; F;
+
+ll sumr(int l, int r){
+	return acu[r+1]-acu[l];
+}
+
+ll sum(int idx){
+	ll re=0;
+	for (int i=idx;i&gt;=0;i=(i&amp;(i+1))-1){
+		re+=F[i];
+	}
+	return re;
+}
+
+ll sum(int l,int r){
+	return sum(r)-sum(l-1);
+}
+
+void increase(int idx, ll add){
+	for (int i=idx;i&lt;n;i=(i|(i+1))){
+		F[i]+=add;
+	}
+}
+
+int main(){
+	fastio;
+	cin&gt;&gt;n&gt;&gt;q;
+	a.assign(n,0);
+	F.assign(n,0);
+	p.assign(n,-1);
+	acu.assign(n+1,0);
+	for (int i=0;i&lt;n;++i){
+		cin&gt;&gt;a[i];
+		acu[i+1]=acu[i]+a[i];
+	}
+	
+	vector&lt;array&lt;int,2&gt;&gt; st;
+	for (int i=0;i&lt;n;++i){
+		while (st.size()&amp;&amp;st.back()[0]&lt;a[i]){
+			p[st.back()[1]]=i-1;
+			st.pop_back();
+		}
+		st.push_back({a[i],i});
+	}
+	while (st.size()){
+		p[st.back()[1]]=n-1;
+		st.pop_back();
+	}
+	
+	deque&lt;int&gt; ans;
+	for (int i=0;i&lt;n;i=p[i]+1){
+		ans.push_back(i);
+		increase(i,1LL*(p[i]-i+1)*a[i]);
+	}
+	vector&lt;array&lt;int,3&gt;&gt; query;
+	for (int i=0;i&lt;q;++i){
+		int l,r;cin&gt;&gt;l&gt;&gt;r;--l;--r;
+		query.push_back({l,r,i});
+	}
+	sort(query.begin(),query.end());
+	
+	stack&lt;int&gt;tmp;
+	vector&lt;ll&gt; re(q,-1);
+	for (int i=0;i&lt;q;++i){
+		int l=query[i][0],r=query[i][1],idx=query[i][2];
+		while (l&gt;ans[0]){
+			int cur=ans[0]+1;
+			ans.pop_front();
+			int nxt=(ans.size()&gt;0)?ans[0]:n;
+			while (cur&lt;nxt){
+				tmp.push(cur);
+				increase(cur,1LL*(p[cur]-cur+1)*a[cur]);
+				cur=p[cur]+1;
+			}
+			while (!tmp.empty()){
+				ans.push_front(tmp.top());
+				tmp.pop();
+			}
+		}
+		auto it=upper_bound(ans.begin(),ans.end(),r);
+		int e=ans[prev(it)-ans.begin()];
+		re[idx]=sum(l,r)-1LL*a[e]*(p[e]-r)-sumr(l,r);
+		
+	}
+	for (int i=0;i&lt;q;++i) cout&lt;&lt;re[i]&lt;&lt;'\n';
+	
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

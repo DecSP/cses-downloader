@@ -1,0 +1,144 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+
+<style type="text/css">
+	body{
+		padding: 25px 50px 25px 50px;
+		font-family: 'Cabin';
+	}
+	a{
+		color: #38A3A5;
+		text-decoration: underline;
+	}
+	div{
+		margin-bottom: 15px;
+	}
+	code, code[class*=language-], pre[class*=language-]{
+		font-family: 'Source Code Pro';
+	}
+</style>
+
+<body>
+<div class="card">
+	<h2>Problem: Monsters</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1194">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+#define ll long long
+#define fastio ios::sync_with_stdio(false); cin.tie(NULL)
+using namespace std;
+ll MOD = 1000000007;
+
+vector &lt;string&gt; mat;
+queue &lt;pair&lt;int,int&gt;&gt; mons;
+queue &lt;pair&lt;int,int&gt;&gt; you;
+vector&lt;vector&lt;int&gt;&gt; dMons;
+vector&lt;vector&lt;int&gt;&gt; dYou;
+vector&lt;vector&lt;int&gt;&gt; path;
+int n,m;
+
+int dirx[] = {-1,1,0,0};
+int diry[] = {0,0,-1,1};
+char dirName[] = {'U','D','L','R'};
+bool isExit(int x, int y) {
+	return x==0||y==0||x==n-1||y==m-1;
+}
+
+void printPath(int x,int y){
+	string p;
+	while (dYou[x][y]!=0){
+		int i=path[x][y];
+		p.push_back(dirName[i]);
+		x-=dirx[i];y-=diry[i];
+	}
+	reverse(p.begin(),p.end());
+	cout&lt;&lt;p&lt;&lt;'\n';
+}
+
+void solve(){
+	while (!mons.empty()) {
+		auto v=mons.front();
+		mons.pop();
+		
+		for (int i=0;i&lt;4;++i){
+			int newx=v.first+dirx[i], newy=v.second+diry[i];
+			if (newx&gt;=n||newx&lt;0||newy&gt;=m||newy&lt;0) continue;
+			if (mat[newx][newy]=='#') continue;
+			if (dMons[newx][newy]!=MOD) continue;
+			dMons[newx][newy] = dMons[v.first][v.second]+1;
+			mons.push(make_pair(newx,newy));
+		}
+	}
+
+	path=dYou;
+	while (!you.empty()){
+		auto v = you.front();
+		you.pop();
+		
+		if (isExit(v.first,v.second)&amp;&amp;dYou[v.first][v.second] &lt; dMons[v.first][v.second]) {
+			cout&lt;&lt;"YES\n";
+			cout&lt;&lt;dYou[v.first][v.second]&lt;&lt;'\n';
+			printPath(v.first,v.second);
+			return;
+		}
+
+		for (int i=0; i&lt;4; ++i) {
+			int newx=v.first+dirx[i], newy=v.second+diry[i];
+			if (newx&gt;=n||newx&lt;0||newy&gt;=m||newy&lt;0) continue;
+			if (mat[newx][newy]=='#') continue;
+			if (dYou[newx][newy]!=MOD) continue;
+			dYou[newx][newy] = dYou[v.first][v.second]+1;
+			path[newx][newy] = i;
+			you.push(make_pair(newx,newy));
+		}
+	}
+	cout&lt;&lt;"NO\n";
+}
+
+int main() {
+	fastio;
+	cin&gt;&gt;n&gt;&gt;m;
+	mat.assign(n,"");
+	dMons.assign(n,vector&lt;int&gt;(m,MOD));
+	dYou.assign(n,vector&lt;int&gt;(m,MOD));
+	for (int i=0; i&lt;n; ++i) {
+		cin&gt;&gt;mat[i];	
+		for (int j=0; j&lt;m; ++j) {
+			if (mat[i][j]=='M') {
+				mons.push(make_pair(i,j));
+				dMons[i][j]=0;
+			}
+			else if (mat[i][j]=='A') {
+				you.push(make_pair(i,j));
+				dYou[i][j]=0;
+			}
+		}
+	}
+
+
+	solve();
+	return 0;
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

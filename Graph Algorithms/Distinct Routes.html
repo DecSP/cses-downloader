@@ -1,0 +1,126 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+
+<style type="text/css">
+	body{
+		padding: 25px 50px 25px 50px;
+		font-family: 'Cabin';
+	}
+	a{
+		color: #38A3A5;
+		text-decoration: underline;
+	}
+	div{
+		margin-bottom: 15px;
+	}
+	code, code[class*=language-], pre[class*=language-]{
+		font-family: 'Source Code Pro';
+	}
+</style>
+
+<body>
+<div class="card">
+	<h2>Problem: Distinct Routes</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1711">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-python">from queue import Queue
+n,m=map(int,input().split())
+adj=[[] for i in range(n)]
+cap=[[0]*n for i in range(n)]
+for i in range(m):
+    x,y=map(int,input().split());x-=1;y-=1
+    adj[x].append(y)
+    adj[y].append(x)
+    cap[x][y]=1
+caporig=[x.copy() for x in cap]
+
+p=[-1]*n
+lv=[-1]*n
+def bfs():
+    global lv
+    q=Queue()
+    q.put(0)
+    lv=[-1]*n
+    lv[0]=0
+    while not q.empty():
+        f=q.get()
+        for v in adj[f]:
+            if cap[f][v] and lv[v]==-1:
+                lv[v]=lv[f]+1
+                q.put(v)
+    return lv[-1]!=-1
+def dfs(cur):
+    global p
+    if cur==n-1: return True    
+    for v in adj[cur]:
+        if cap[cur][v] and lv[cur]&lt;lv[v]:
+            p[v]=cur
+            if dfs(v): return True
+    return False
+while True:
+    bfs()
+    nf=0
+    while dfs(0):
+        nf+=1
+        cur=n-1
+        while cur:
+            x,y=p[cur],cur
+            cap[x][y]-=1
+            cap[y][x]+=1
+            cur=p[cur]
+    if nf==0: break
+# after maxflow algo
+
+def bfs2():
+    global p
+    q=Queue()
+    q.put(0)
+    p=[-1]*n
+    p[0]=0
+    while not q.empty():
+        f=q.get()
+        for v in adj[f]:
+            if caporig[f][v] and not cap[f][v] and p[v]==-1:
+                p[v]=f
+                q.put(v)
+    return p[-1]!=-1
+paths=[]
+while bfs2():
+    cur=n-1
+    path=[n-1]
+    while cur:
+        x,y=p[cur],cur
+        caporig[x][y]=0
+        cur=p[cur]
+        path.append(cur)
+    paths.append(path)
+print(len(paths))
+for path in paths:
+    print(len(path))
+    print(" ".join([str(i+1) for i in path[::-1]]))
+
+
+</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+

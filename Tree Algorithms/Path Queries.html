@@ -1,0 +1,156 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-cbQXwDFK7lj2Fqfkuxbo5iD1dSbLlJGXGpfTDqbggqjHJeyzx88I3rfwjS38WJag/ihH7lzuGlGHpDBymLirZQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../styles.css">
+
+<style type="text/css">
+	body{
+		padding: 25px 50px 25px 50px;
+		font-family: 'Cabin';
+	}
+	a{
+		color: #38A3A5;
+		text-decoration: underline;
+	}
+	div{
+		margin-bottom: 15px;
+	}
+	code, code[class*=language-], pre[class*=language-]{
+		font-family: 'Source Code Pro';
+	}
+</style>
+
+<body>
+<div class="card">
+	<h2>Problem: Path Queries</h2>
+	<br>
+	<div>
+		<b>Solution Contributor:</b> <a target="_blank" href="https://github.com/DecSP">Cao Son Nguyen</a>.<br>
+		<a target="_blank" href="https://cses.fi/problemset/task/1138">View on CSES</a>
+	</div>
+
+	
+	<h3>Code</h3>
+	<ul>
+		<pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+#define ll long long
+using namespace std;
+
+vector&lt;vector&lt;int&gt;&gt; adj;
+vector&lt;array&lt;int,2&gt;&gt; seg,seg1,seg2;
+int timer,n,q;
+vector&lt;int&gt; a;
+ll sA=0;
+
+void dfs(int curr,int p){
+	seg[curr][0]=timer++;
+	for (int &amp;v:adj[curr]){
+		if (v==p) continue;
+		dfs(v,curr);
+	}
+
+	seg[curr][1]=timer-1;
+}
+
+void buildTree(int v,int tl, int tr, vector&lt;int&gt;&amp;a,vector&lt;ll&gt;&amp;st){
+	if (tl==tr){
+		st[v]=a[tl];
+	}
+	else {
+		int mid=(tl+tr)&gt;&gt;1;
+		buildTree(v*2,tl,mid,a,st);
+		buildTree(v*2+1,mid+1,tr,a,st);
+		st[v]=st[v*2]+st[v*2+1];
+	}
+}
+
+ll sum(int v, int l,int r, int tl, int tr,vector&lt;ll&gt;&amp;st){
+	if (l==tl&amp;&amp;r==tr){
+		return st[v];
+	}
+	if (l&gt;r) return 0;
+	int mid=(tl+tr)&gt;&gt;1;
+	return sum(v*2,l,min(r,mid),tl,mid,st)+sum(v*2+1,max(l,mid+1),r,mid+1,tr,st);
+}
+
+void update(int v, int tl, int tr, int pos, int val,vector&lt;ll&gt;&amp;st){
+	if (tl==tr){
+		st[v]=val;
+		return;
+	}
+	int mid=(tl+tr)&gt;&gt;1;
+	if (pos&lt;=mid) update(v*2,tl,mid,pos,val,st);
+	else update(v*2+1,mid+1,tr,pos,val,st);
+	st[v]=st[v*2]+st[v*2+1];
+}
+
+
+int main(){
+	ios::sync_with_stdio(false);cin.tie(NULL);
+	cin&gt;&gt;n&gt;&gt;q;
+	vector&lt;int&gt; a1(n);
+	for (int&amp;v:a1) cin&gt;&gt;v;
+	adj.assign(n,vector&lt;int&gt;());
+	for (int i=0;i&lt;n-1;++i){
+		int x,y;cin&gt;&gt;x&gt;&gt;y;--x;--y;
+		adj[x].push_back(y);
+		adj[y].push_back(x);
+	}
+	seg.assign(n,array&lt;int,2&gt;());
+	seg1.assign(n,array&lt;int,2&gt;());
+	seg2.assign(n,array&lt;int,2&gt;());
+	timer=0;
+	dfs(0,0);
+	a.assign(n,0);
+	
+	for (int i=0;i&lt;n;++i){
+		a[seg[i][0]]=a1[i];
+		sA+=a1[i];
+
+		seg1[i]=seg[i];
+		seg2[i]={seg[i][1],seg[i][0]};
+	}
+
+	sort(seg1.begin(),seg1.end());sort(seg2.begin(),seg2.end());
+	vector&lt;int&gt; pref(n);
+	for (int i=0;i&lt;n;++i) pref[i]=a[seg2[i][1]];
+
+	vector&lt;ll&gt; st1(4*n),st2(4*n);
+	buildTree(1,0,n-1,a,st1);
+	buildTree(1,0,n-1,pref,st2);
+
+	for (int i=0;i&lt;q;++i){
+		int t,s;cin&gt;&gt;t&gt;&gt;s;
+		--s;
+		int pos=seg[s][0];
+		if (t==1){
+			int x;
+			cin&gt;&gt;x;
+			int prepos=lower_bound(seg2.begin(),seg2.end(),array&lt;int,2&gt;({seg[s][1],seg[s][0]}))-seg2.begin();
+			update(1,0,n-1,pos,x,st1);
+			update(1,0,n-1,prepos,x,st2);
+			sA=sA-a[pos]+x;
+			a[pos]=x;
+		}
+		else{
+			int prepos=lower_bound(seg2.begin(),seg2.end(),array&lt;int,2&gt;({seg[s][0],0}))-seg2.begin();
+			cout&lt;&lt;sA-sum(1,pos+1,n-1,0,n-1,st1)-sum(1,0,prepos-1,0,n-1,st2)
+			&lt;&lt;'\n';
+		}
+	}
+	return 0;
+}</code></pre>
+	</ul>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+
