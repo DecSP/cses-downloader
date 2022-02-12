@@ -1,2 +1,2 @@
-# cses-downloader
-cses problemset solutions downloader + packager with beautiful web interface
+# CSES Downloader
+CSES problemset solutions downloader + packager with beautiful web interface provided by [Dinh Nam Nguyen](https://github.com/NguyenD-Nam)
