@@ -6,23 +6,7 @@ def genHtmlProblem(param):return """
 <link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="../styles.css">
-
-<style type="text/css">
-	body{
-		padding: 25px 50px 25px 50px;
-		font-family: 'Cabin';
-	}
-	a{
-		color: #38A3A5;
-		text-decoration: underline;
-	}
-	div{
-		margin-bottom: 15px;
-	}
-	code, code[class*=language-], pre[class*=language-]{
-		font-family: 'Source Code Pro';
-	}
-</style>
+<link rel="stylesheet" type="text/css" href="../content.css">
 
 <body>
 <div class="card">
@@ -59,20 +43,52 @@ def genHtmlIndex(sidebar):
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>CSES Sols</title>
+	<meta name="theme-color" content="#57CC99">
+	<meta property="og:image" content="public/og.png"/>
+	<meta property="og:type" content="website"/>
+	<meta property="og:url" content="https://csessolutions.netlify.app/"/>
+	<meta property="og:title" content="CSES Solutions"/>
+	<meta property="og:description" content="We provide our solutions for coding problems of CSES site that is owned by Antti Laaksonen & Topi Talvitie during our data structures and algorithms learning. Most of the solutions are written in C++ and Python programming language."/>
+	<link rel="icon" href="public/icon.png">
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Cabin" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Fugaz+One" rel="stylesheet">
+	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 	<link rel="stylesheet" type="text/css" href="styles.css">
 
 	<script>
 	function loadHtml(filename){
 		document.getElementById('content').innerHTML = '<iframe class="iframe" frameborder="0" src="'+filename+'">';
 	}
-
+	function clearNav(){
+		document.getElementById('home').style.textDecoration="none";
+		document.getElementById('about').style.textDecoration="none";
+	}
+	function setNav(id){
+		if(id === 'home'){
+			document.getElementById('home').style.textDecoration="underline";
+		}
+		if(id === 'contact'){
+			document.getElementById('about').style.textDecoration="underline";
+		}
+	}
+	var open = 0;
+	if(screen.width <= 670){
+		document.getElementById('sidebar').style.display="none";
+	}
+	function showSidebar(){
+		open++;
+		if(open%2 ==1){
+			document.getElementById('sidebar').style.display="block";
+		}
+		else if(open%2 == 0){
+			document.getElementById('sidebar').style.display="none";
+		}
+	}
 	</script>
 </head>
 <body>
