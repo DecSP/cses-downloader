@@ -163,6 +163,7 @@ hr{
 @media(max-width: 670px){
 	button, a, summary{
 		cursor: default;
+		outline: none;
 	}
 	.header{
 		position: sticky;
