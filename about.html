@@ -28,6 +28,21 @@
 	<ul class="intuition">
 		<li>If you want to contribute solutions for any unsolved CSES problem on this site, feel free to make a pull request on this project's <a target="_blank" href="https://github.com/DecSP/cses-downloader">repository</a>, we really appreciate it.</li>
 	</ul>
+	<h3>Download solutions</h3>
+	You actually only need crawler.py (and htmlgen.py, style.css, content.css if you want to package solutions) for this. You might want to create an empty directory and put only those files inside. Please follow this steps:<br>	
+	<h4>Get your SESSID</h4>
+	<ul class="intuition">
+		<li>Go to CSES login page.</li>
+		<li>Press F12 to open Browser Dev Tools and go to Network tab.</li>
+		<li>Fill the information and login.</li>
+		<li>Look at the Browser Dev Tools and find the details of your login request then go to cookies, you will find the field "PHPSESSID".</li>
+		<li>Copy the value and paste it into crawler.py where "YOUR_SESSID_HERE" is specified.</li>
+	</ul>
+	<h4>Download your solutions using crawler.py</h4>
+	<ul class="intuition">
+		<li><code>python crawler.py</code> to download all problems.</li>
+		<li><code>python crawler.py &lt;problemID&gt;</code> to download a specific problem.</li>
+	</ul>
 	<h3>Contact</h3>
 	<ul class="intuition">
 		<li><i>(See <i class="fas fa-at"></i>Contact section for more info).</i></li>
