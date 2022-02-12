@@ -61,8 +61,39 @@ def genHtmlIndex(sidebar):
 	<link rel="stylesheet" type="text/css" href="styles.css">
 
 	<script>
+	var sideCate='';
+	var sideProb='';
+	function highlightSide(){
+		const cates=document.getElementsByTagName('summary');
+		for (const cate of cates){
+			if (cate.innerHTML==sideCate){
+				cate.classList.toggle('highlight')
+				for (const prob of cate.parentElement.children){
+					if (prob.firstChild.innerHTML==sideProb){
+						prob.classList.toggle('highlight')
+						break;
+					}
+				}
+				break;
+			}
+		}
+	}
 	function loadHtml(filename){
 		document.getElementById('content').innerHTML = '<iframe class="iframe" frameborder="0" src="'+filename+'">';
+
+		const collection=filename.split('/');
+		highlightSide();
+		if (collection.length==2){
+			sideCate=collection[0]
+			sideProb=collection[1].substring(0,collection[1].length-5)
+			highlightSide();
+			document.title=`${sideProb} | CSES Sols`;
+		}
+		else{
+			sideCate=''
+			sideProb=''
+			document.title=`CSES Sols`;	
+		}
 	}
 	function clearNav(){
 		document.getElementById('home').style.textDecoration="none";
