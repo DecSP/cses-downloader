@@ -24,12 +24,8 @@
 		<li>We provide our solutions for coding problems of CSES site that is owned by <a target="_blank" href="https://www.cs.helsinki.fi/u/ahslaaks/">Antti Laaksonen</a> & <a target="_blank" href="https://researchportal.helsinki.fi/en/persons/topi-talvitie">Topi Talvitie</a> during our data structures and algorithms learning. Most of the solutions are written in C++ and Python programming language.</li>
 		<li>This project is open-source on Github. You can support us by giving this <a target="_blank" href="https://github.com/DecSP/cses-downloader">repository</a> a star.</li>
 	</ul>
-	<h3>Source & Contribution</h3>
-	<ul class="intuition">
-		<li>If you want to contribute solutions for any unsolved CSES problem on this site, feel free to make a pull request on this project's <a target="_blank" href="https://github.com/DecSP/cses-downloader">repository</a>, we really appreciate it.</li>
-	</ul>
 	<h3>Download solutions</h3>
-	<ul class="intuition">You actually only need <code>crawler.py</code> (and <code>htmlgen.py</code>, <code>style.css</code>, <code>content.css</code> if you want to package solutions). You might want to create an empty directory and put only those files inside. Please follow these steps:</ul>
+	<ul class="intuition">To do this you actually need only <code>crawler.py</code> (and <code>htmlgen.py</code>, <code>style.css</code>, <code>content.css</code> if you want to package solutions). You might want to create an empty directory and put only those files inside. Please follow these steps:</ul>
 	<h4>Get your SESSID</h4>
 	<ul class="intuition">
 		<li>Go to CSES login page.</li>
@@ -38,10 +34,14 @@
 		<li>Look at the Browser Dev Tools and find the details of your login request then go to cookies, you will find the field <code>PHPSESSID</code>.</li>
 		<li>Copy the value and paste it into <code>crawler.py</code> where <code>"YOUR_SESSID_HERE"</code> is specified.</li>
 	</ul>
-	<h4>Download solutions using <code>crawler.py</code></h4>
+	<h4>Download solutions using these scripts</h4>
 	<ul class="intuition">
-		<li><code>python crawler.py</code> to download all problems.</li>
-		<li><code>python crawler.py &lt;problemID&gt;</code> to download a specific problem.</li>
+		<li><code>python crawler.py</code> to download solutions of all problems.</li>
+		<li><code>python crawler.py &lt;problemID&gt;</code> to download solutions of a specific problem.</li>
+	</ul>
+	<h3>Source & Contribution</h3>
+	<ul class="intuition">
+		<li>If you want to contribute solutions for any unsolved CSES problem on this site, feel free to make a pull request on this project's <a target="_blank" href="https://github.com/DecSP/cses-downloader">repository</a>, we really appreciate it.</li>
 	</ul>
 	<h3>Contact</h3>
 	<ul class="intuition">
