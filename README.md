@@ -10,5 +10,5 @@ The site provides my solutions for coding problems of CSES site that is owned by
 
 ## How to download your CSES solutions and/or package them into web interface:
 You actually only need crawler.py (and htmlgen.py, style.css, content.css if you want to package solutions) for this. You might want to create an empty directory and put only those files inside. Then:
-    - `python crawler.py` to download all problems
-    - `python crawler.py <problemID>` to download a specific problem
+- `python crawler.py` to download all problems
+- `python crawler.py <problemID>` to download a specific problem
