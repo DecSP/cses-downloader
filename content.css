@@ -1,6 +1,7 @@
 body{
 	padding: 25px 50px 25px 50px;
 	font-family: 'Cabin';
+	overflow-y: auto;
 }
 h2{
 	margin-bottom: 25px;
