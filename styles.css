@@ -3,6 +3,7 @@ body{
 	margin: 0;
 	font-family: 'Cabin';
 	font-size: 18px;
+	overflow-y: hidden;
 }
 a{
 	color: #57CC99;
