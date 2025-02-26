@@ -22,33 +22,33 @@
 	<h3>Code</h3>
 	<ul>
 		<pre class="line-numbers"><code class="language-cpp">
-            #include &lt;bits/stdc++.h&gt;
-            #define fastio ios::sync_with_stdio(false); cin.tie(NULL)
-            #define int long long
-            using namespace std;
-            
-            int32_t main() {
-                fastio;
-                int n;
-                cin &gt;&gt; n;
-            
-                bitset&lt;3005&gt; b[3005];
-                for (int i = 0; i &lt; n; i++) {
-                    cin &gt;&gt; b[i];
-                }
-            
-                int ans = 0;
-            
-                for (int i = 0; i &lt; n; i++) {
-                    for (int j = i + 1; j &lt; n; j++) {
-                        int common = (b[i] &amp; b[j]).count();
-                        ans += common * (common - 1) / 2;
-                    }
-                }
-            
-                cout &lt;&lt; ans &lt;&lt; '\n';
-                return 0;
-            }
+#include &lt;bits/stdc++.h&gt;
+#define fastio ios::sync_with_stdio(false); cin.tie(NULL)
+#define int long long
+using namespace std;
+
+int32_t main() {
+    fastio;
+    int n;
+    cin &gt;&gt; n;
+
+    bitset&lt;3005&gt; b[3005];
+    for (int i = 0; i &lt; n; i++) {
+        cin &gt;&gt; b[i];
+    }
+
+    int ans = 0;
+
+    for (int i = 0; i &lt; n; i++) {
+        for (int j = i + 1; j &lt; n; j++) {
+            int common = (b[i] &amp; b[j]).count();
+            ans += common * (common - 1) / 2;
+        }
+    }
+
+    cout &lt;&lt; ans &lt;&lt; '\n';
+    return 0;
+}
 </code></pre>
 	</ul>
 </div>
